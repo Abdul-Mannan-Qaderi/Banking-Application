@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Login - Banking System</title>
+		<title>Register - Banking System</title>
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -134,26 +134,18 @@
 		<nav class="navbar navbar-expand-lg navbar-custom">
 			<a class="navbar-brand" href="#">Goldencat Bank</a>
 			<div class="ml-auto social-icons">
-				<a
-					href="https://www.youtube.com/@codewithgoldencat"
-					target="_blank"
-					title="YouTube"
-				>
+				<a href="https://www.youtube.com" target="_blank" title="YouTube">
 					<i class="fab fa-youtube"></i>
 				</a>
-				<a
-					href="https://www.linkedin.com/in/code-with-goldecat-453460297/"
-					target="_blank"
-					title="LinkedIn"
-				>
+				<a href="https://www.linkedin.com" target="_blank" title="LinkedIn">
 					<i class="fab fa-linkedin"></i>
 				</a>
 			</div>
 		</nav>
 
 		<div class="container">
-			<h2 class="text-center">Login</h2>
-			<form method="post" action="/login">
+			<h2 class="text-center">Register a New Account</h2>
+			<form method="post" action="/register">
 				<div class="form-group">
 					<label>Username:</label>
 					<input type="text" class="form-control" name="username" required />
@@ -167,15 +159,15 @@
 						required
 					/>
 				</div>
-				<button type="submit" class="btn btn-block">Login</button>
+				<button type="submit" class="btn btn-block">Register</button>
 			</form>
 			<p class="text-center mt-3">
-				Don't have an account?
-				<a href="/register" class="custom-link">Register here</a>
+				Already have an account?
+				<a href="/login" class="custom-link">Login here</a>
 			</p>
 
-			<div th:if="${param.error}" class="alert alert-danger mt-3 text-center">
-				Invalid username or password.
+			<div th:if="${error}" class="alert alert-danger mt-3 text-center">
+				User already present.
 			</div>
 		</div>
 
