@@ -3,23 +3,24 @@ package com.example.bankapp.model;
 //  imports 
 import java.math.BigDecimal;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
-
 import java.util.List;
 import java.util.Collection;
 
 @Entity
-public class Account {
+public class Account implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   private String username;
+  private String password;
   private BigDecimal balance;
 
   @OneToMany(mappedBy = "account")
@@ -38,10 +39,18 @@ public class Account {
 
   // default constructor
   public Account() {
-
   }
 
   // getters & setters
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
   public Long getId() {
     return id;
   }
