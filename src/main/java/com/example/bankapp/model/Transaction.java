@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Transaction {
@@ -18,9 +18,13 @@ public class Transaction {
   private String type;
   private LocalDateTime timestamp;
 
-  @ManyToMany
+  @ManyToOne
   @JoinColumn(name = "account_id")
   private Account account;
+
+  // default constructor
+  public Transaction() {
+  }
 
   // constructor
   public Transaction(BigDecimal amount, String type, LocalDateTime timestamp, Account account) {
@@ -28,10 +32,6 @@ public class Transaction {
     this.type = type;
     this.timestamp = timestamp;
     this.account = account;
-  }
-
-  // default constructor
-  public Transaction() {
   }
 
   // getters and setters

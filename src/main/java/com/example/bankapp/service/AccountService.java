@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class AccountService implements UserDetailsService {
 
   public Account registerAccount(String username, String password) {
     if (accountRepository.findByUsername(username).isPresent()) {
-      throw new RuntimeException("User already exist.");
+      throw new RuntimeException("User already exists.");
     }
 
     Account account = new Account();
@@ -72,13 +73,14 @@ public class AccountService implements UserDetailsService {
     return Arrays.asList(new SimpleGrantedAuthority("User"));
   }
 
+  @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Account account = findAccountByUsername(username);
     if (account == null) {
       throw new UsernameNotFoundException("Username or Password not found");
     }
     return new Account(
-        account.getUsername(), account.getBalance(), account.getTransactions(),
+        account.getUsername(), account.getPassword(), account.getBalance(), account.getTransactions(),
         authorities());
   }
 
@@ -88,7 +90,7 @@ public class AccountService implements UserDetailsService {
     }
 
     Account toAccount = accountRepository.findByUsername(toUsername)
-        .orElseThrow(() -> new RuntimeException("Recipient account not found!"));
+        .orElseThrow(() -> new RuntimeException("Recipient not found!"));
 
     // subtruct amount from the sending user
     fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
@@ -97,5 +99,19 @@ public class AccountService implements UserDetailsService {
     // add the amount to the reciever user
     toAccount.setBalance(toAccount.getBalance().add(amount));
     accountRepository.save(toAccount);
+
+    // create transaction record
+    Transaction debitTransaction = new Transaction(
+        amount, "Transfer to " + toAccount.getUsername(),
+        LocalDateTime.now(),
+        fromAccount);
+    transactionRepository.save(debitTransaction);
+
+    Transaction creditTransaction = new Transaction(
+        amount, "Transfer from " + fromAccount.getUsername(),
+        LocalDateTime.now(),
+        toAccount);
+    transactionRepository.save(creditTransaction);
+
   }
 }

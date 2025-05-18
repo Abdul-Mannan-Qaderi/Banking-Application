@@ -29,26 +29,16 @@ public class Account implements UserDetails {
   @Transient
   private Collection<? extends GrantedAuthority> authorities;
 
-  public Account(String username, BigDecimal balance, List<Transaction> transactions,
-      Collection<? extends GrantedAuthority> authorities) {
-    this.username = username;
-    this.balance = balance;
-    this.transactions = transactions;
-    this.authorities = authorities;
-  }
-
-  // default constructor
   public Account() {
   }
 
-  // getters & setters
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
+  public Account(String username, String password, BigDecimal balance, List<Transaction> transactions,
+      Collection<? extends GrantedAuthority> authorities) {
+    this.username = username;
     this.password = password;
+    this.balance = balance;
+    this.transactions = transactions;
+    this.authorities = authorities;
   }
 
   public Long getId() {
@@ -65,6 +55,14 @@ public class Account implements UserDetails {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public BigDecimal getBalance() {
@@ -90,5 +88,5 @@ public class Account implements UserDetails {
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities = authorities;
   }
-
 }
+// getters & setters
